@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseEndpoint = 'https://public.tableau.com/profile/api/';
 const proxy = `https://cors-anywhere.herokuapp.com/`;
+const baseEndpoint = 'https://public.tableau.com/profile/api/';
 const form = document.querySelector('form.search');
 const recipesGrid = document.querySelector('.workbooks');
 
@@ -30,14 +30,20 @@ async function fetchAndDisplay(query) {
 function displayRecipes(workbooks) {
   console.log('Creating HTML');
   console.log(workbooks);
-  const html = workbooks.map(
-    workbook => `<div class="workbook">
+  const html = workbooks.map((workbook) => {
+    let thumbnailParam = workbook.defaultViewRepoUrl.replace('sheets/', '');
+    let thumbnailURL = `https://public.tableau.com/thumb/views/${thumbnailParam}`;
+
+    let workbookHTML = `
+    <div>
       <h2>${workbook.defaultViewName}</h2>
       <p>${workbook.description}</p>
-      </div>`
-      );
+      <img src=${thumbnailURL} alt=${workbook.defaultViewName}/>
+    </div>`
+
+    return workbookHTML;
+  });
       // ${workbook.thumbnail &&
-      //   `<img src="${workbook.thumbnail}" alt="${workbook.title}"/>`}
       // <a href="${workbook.href}">View Recipe →</a>
   recipesGrid.innerHTML = html.join('');
 }
