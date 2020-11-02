@@ -22,7 +22,6 @@ async function fetchAndDisplay(query) {
   form.submit.disabled = true;
   // submit the search
   const workbooks = await fetchWorkbooks(query);
-  console.log(workbooks);
   form.submit.disabled = false;
   displayRecipes(workbooks);
 }
@@ -30,21 +29,27 @@ async function fetchAndDisplay(query) {
 function displayRecipes(workbooks) {
   console.log('Creating HTML');
   console.log(workbooks);
+  // Example https://public.tableau.com/profile/will7508#!/vizhome/ChildMarriage_16014531003290/ChildMarriageInstaviz
+
   const html = workbooks.map((workbook) => {
     let thumbnailParam = workbook.defaultViewRepoUrl.replace('sheets/', '');
     let thumbnailURL = `https://public.tableau.com/thumb/views/${thumbnailParam}`;
+
+    let dashboardBaseURL = 'https://public.tableau.com/profile/';
+    let dashboardURLSuffix = workbook.defaultViewName.split(' ').join('');
+    dashboardURLSuffix = dashboardURLSuffix.replace("'", '');
+    let dashboardURL = `${dashboardBaseURL}${workbook.authorProfileName}#!/vizhome/${workbook.workbookRepoUrl}/${dashboardURLSuffix}`
 
     let workbookHTML = `
     <div>
       <h2>${workbook.defaultViewName}</h2>
       <p>${workbook.description}</p>
       <img src=${thumbnailURL} alt=${workbook.defaultViewName}/>
+      <a href="${dashboardURL}">View Dashboard →</a>
     </div>`
 
     return workbookHTML;
   });
-      // ${workbook.thumbnail &&
-      // <a href="${workbook.href}">View Recipe →</a>
   recipesGrid.innerHTML = html.join('');
 }
 
