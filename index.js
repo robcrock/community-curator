@@ -3,7 +3,9 @@ import axios from 'axios';
 const proxy = `https://cors-anywhere.herokuapp.com/`;
 const baseEndpoint = 'https://public.tableau.com/profile/api/';
 const form = document.querySelector('form.search');
-const recipesGrid = document.querySelector('#app');
+const htmlHook = document.querySelector('#app');
+htmlHook.innerHTML = `<ul id="app" class="grid space-around"></ul>`
+const app = htmlHook.querySelector('ul');
 
 async function fetchWorkbooks(query) {
   const res = await axios.get(`${proxy}${baseEndpoint}${query}`);
@@ -55,7 +57,7 @@ function displayRecipes(workbooks) {
 
     return workbookHTML;
   });
-  recipesGrid.innerHTML = html.join('');
+  app.innerHTML = html.join('');
 }
 
 form.addEventListener('submit', handleSubmit);
