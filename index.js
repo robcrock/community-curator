@@ -3,9 +3,9 @@ import axios from 'axios';
 const proxy = `https://cors-anywhere.herokuapp.com/`;
 const baseEndpoint = 'https://public.tableau.com/profile/api/';
 const form = document.querySelector('form.search');
-const htmlHook = document.querySelector('#app');
-htmlHook.innerHTML = `<div class="grid"></div>`
-const app = htmlHook.querySelector('div');
+const app = document.querySelector('.band');
+// htmlHook.innerHTML = `<div class="grid"></div>`
+// const app = htmlHook.querySelector('div');
 
 async function fetchWorkbooks(query) {
   const res = await axios.get(`${proxy}${baseEndpoint}${query}`);
@@ -43,21 +43,14 @@ function displayRecipes(workbooks) {
     let dashboardURL = `${dashboardBaseURL}${workbook.authorProfileName}#!/vizhome/${workbook.workbookRepoUrl}/${dashboardURLSuffix}`
 
     let workbookHTML = `
-    <div class='gird__item'>
-      <div class="card">
-        <img
-          class='card__img'
-          src=${thumbnailURL}
-          alt=${workbook.defaultViewName}
-        />
-        <div class="card__content">
-          <h1 class='card__header'>${workbook.defaultViewName}</h1>
-          <p class="card__text">${workbook.description}</p>
-          <button class="card__btn">
-            <a href="${dashboardURL}">View Dashboard <span>&rarr;</span></a>
-          </button>
-        </div>
-      </div>
+    <div class="item">
+        <a href="${dashboardURL}" class="card">
+          <div class="thumb" style="background-image: url(${thumbnailURL});"></div>
+          <article>
+            <h1 class='card__header'>${workbook.defaultViewName}</h1>
+            <p class="card__text">${workbook.description}</p>
+          </article>
+        </a>
     </div>`
 
     return workbookHTML;
@@ -68,3 +61,20 @@ function displayRecipes(workbooks) {
 form.addEventListener('submit', handleSubmit);
 // on page load run it with pizza
 fetchAndDisplay('will7508');
+
+{/* <div class='gird__item'>
+<div class="card">
+  <img
+    class='card__img'
+    src=${thumbnailURL}
+    alt=${workbook.defaultViewName}
+  />
+  <div class="card__content">
+    <h1 class='card__header'>${workbook.defaultViewName}</h1>
+    <p class="card__text">${workbook.description}</p>
+    <button class="card__btn">
+      <a href="${dashboardURL}">View Dashboard <span>&rarr;</span></a>
+    </button>
+  </div>
+</div>
+</div> */}
