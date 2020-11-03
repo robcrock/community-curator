@@ -4,8 +4,8 @@ const proxy = `https://cors-anywhere.herokuapp.com/`;
 const baseEndpoint = 'https://public.tableau.com/profile/api/';
 const form = document.querySelector('form.search');
 const htmlHook = document.querySelector('#app');
-htmlHook.innerHTML = `<ul id="app" class="grid space-around"></ul>`
-const app = htmlHook.querySelector('ul');
+htmlHook.innerHTML = `<div class="grid"></div>`
+const app = htmlHook.querySelector('div');
 
 async function fetchWorkbooks(query) {
   const res = await axios.get(`${proxy}${baseEndpoint}${query}`);
@@ -43,17 +43,22 @@ function displayRecipes(workbooks) {
     let dashboardURL = `${dashboardBaseURL}${workbook.authorProfileName}#!/vizhome/${workbook.workbookRepoUrl}/${dashboardURLSuffix}`
 
     let workbookHTML = `
-    <li class='repo bg-light'>
-      <h4 class='header-lg center-text'>
-        ${workbook.defaultViewName}
-      </h4>
-      <img
-        class='avatar'
-        src=${thumbnailURL}
-        alt=${workbook.defaultViewName}
-      />
-      <p>${workbook.description}</p>
-    </li>`
+    <div class='gird__item'>
+      <div class="card">
+        <img
+          class='card__img'
+          src=${thumbnailURL}
+          alt=${workbook.defaultViewName}
+        />
+        <div class="card__content">
+          <h1 class='card__header'>${workbook.defaultViewName}</h1>
+          <p class="card__text">${workbook.description}</p>
+          <button class="card__btn">
+            <a href="${dashboardURL}">View Dashboard <span>&rarr;</span></a>
+          </button>
+        </div>
+      </div>
+    </div>`
 
     return workbookHTML;
   });
