@@ -3,7 +3,7 @@ import axios from 'axios';
 const proxy = `https://cors-anywhere.herokuapp.com/`;
 const baseEndpoint = 'https://public.tableau.com/profile/api/';
 const form = document.querySelector('form.search');
-const recipesGrid = document.querySelector('.workbooks');
+const recipesGrid = document.querySelector('#app');
 
 async function fetchWorkbooks(query) {
   const res = await axios.get(`${proxy}${baseEndpoint}${query}`);
@@ -41,12 +41,17 @@ function displayRecipes(workbooks) {
     let dashboardURL = `${dashboardBaseURL}${workbook.authorProfileName}#!/vizhome/${workbook.workbookRepoUrl}/${dashboardURLSuffix}`
 
     let workbookHTML = `
-    <div>
-      <h2>${workbook.defaultViewName}</h2>
+    <li class='repo bg-light'>
+      <h4 class='header-lg center-text'>
+        ${workbook.defaultViewName}
+      </h4>
+      <img
+        class='avatar'
+        src=${thumbnailURL}
+        alt=${workbook.defaultViewName}
+      />
       <p>${workbook.description}</p>
-      <img src=${thumbnailURL} alt=${workbook.defaultViewName}/>
-      <a href="${dashboardURL}">View Dashboard →</a>
-    </div>`
+    </li>`
 
     return workbookHTML;
   });
