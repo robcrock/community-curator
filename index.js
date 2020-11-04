@@ -29,52 +29,73 @@ async function fetchAndDisplay(query) {
 }
 
 function displayRecipes(workbooks) {
-  console.log('Creating HTML');
-  console.log(workbooks);
-  // Example https://public.tableau.com/profile/will7508#!/vizhome/ChildMarriage_16014531003290/ChildMarriageInstaviz
-
   const html = workbooks.map((workbook) => {
+    console.log(workbooks);
     let thumbnailParam = workbook.defaultViewRepoUrl.replace('sheets/', '');
     let thumbnailURL = `https://public.tableau.com/thumb/views/${thumbnailParam}`;
+    
+    // Example https://public.tableau.com/profile/will7508#!/vizhome/ChildMarriage_16014531003290/ChildMarriageInstaviz
 
+    // https://public.tableau.com/views/ChildMarriage_16014531003290/ChildMarriageInstaviz?:language=en&:display_count=y&:origin=viz_share_link
     let dashboardBaseURL = 'https://public.tableau.com/profile/';
+    let embedURL = 'https://public.tableau.com/views/';
     let dashboardURLSuffix = workbook.defaultViewName.split(' ').join('');
     dashboardURLSuffix = dashboardURLSuffix.replace("'", '');
     let dashboardURL = `${dashboardBaseURL}${workbook.authorProfileName}#!/vizhome/${workbook.workbookRepoUrl}/${dashboardURLSuffix}`
+    let dashboardEmbed = `${embedURL}${workbook.workbookRepoUrl}/${dashboardURLSuffix}`
 
+    // <a href="${dashboardURL}" class="card">
     let workbookHTML = `
-    <div class="item">
-        <a href="${dashboardURL}" class="card">
-          <div class="thumb" style="background-image: url(${thumbnailURL});"></div>
-          <article>
-            <h1 class='card__header'>${workbook.defaultViewName}</h1>
-            <p class="card__text">${workbook.description}</p>
-          </article>
-        </a>
+    <div class="item" data-dashboard=${dashboardEmbed}>
+      <div class="card">
+        <div class="thumb" style="background-image: url(${thumbnailURL});"></div>
+        <article>
+          <h1 class='card__header'>${workbook.defaultViewName}</h1>
+          <p class="card__text">${workbook.description}</p>
+        </article>
+      </div>
     </div>`
 
     return workbookHTML;
   });
-  app.innerHTML = html.join('');
+
+  app.innerHTML = html.join('');  
+
+  const modalOuter = document.querySelector('.modal-outer');
+  const modalInner = document.querySelector('.modal-inner');  
+
+  // Add event listeners
+  const cardButton = document.querySelectorAll('.item');
+  
+  function handleCardButtonClick(event) {
+    const card = event.currentTarget;
+    // grab URL from card button
+    const url = card.dataset.dashboard;
+    console.log(url);
+    // populare the modal
+    // modalInner.innerHTML = `
+    // <div class="embed-responsive embed-responsive-16by9">
+    //   <iframe class="embed-responsive-item"
+    //     src="${url}"
+    //     allowfullscreen></iframe>
+    // </div>
+    // `;
+    // Show the modal
+    modalOuter.classList.add('open');
+    
+    modalOuter.addEventListener('click', function(event) {
+      const isOutside = !event.target.closest('.modal-inner');
+      if (isOutside) {
+        modalOuter.classList.remove('open');
+      }
+    })
+  }
+
+
+  cardButton.forEach(button => button.addEventListener('click', handleCardButtonClick));
 }
+
 
 form.addEventListener('submit', handleSubmit);
 // on page load run it with pizza
 fetchAndDisplay('will7508');
-
-{/* <div class='gird__item'>
-<div class="card">
-  <img
-    class='card__img'
-    src=${thumbnailURL}
-    alt=${workbook.defaultViewName}
-  />
-  <div class="card__content">
-    <h1 class='card__header'>${workbook.defaultViewName}</h1>
-    <p class="card__text">${workbook.description}</p>
-    <button class="card__btn">
-      <a href="${dashboardURL}">View Dashboard <span>&rarr;</span></a>
-    </button>
-  </div>
-</div>
-</div> */}
