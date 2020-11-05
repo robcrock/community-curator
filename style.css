@@ -5,6 +5,20 @@ html {
   padding: 20px 0;
 }
 
+.search {
+  width: 90%;
+  max-width: 1240px;
+  margin: 0 auto;
+  margin-bottom: 8px;
+   
+  display: grid;
+   
+  grid-template-columns: 1fr;
+}
+.search>input {
+  margin-bottom: 4px;
+}
+
 .band {
   width: 90%;
   max-width: 1240px;

@@ -73,6 +73,13 @@ function displayRecipes(workbooks) {
     const url = card.dataset.dashboard;
     console.log(url);
     // populare the modal
+    modalInner.innerHTML = `
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item"
+        src="${url}"
+        allowfullscreen></iframe>
+    </div>`;
+    // https://public.tableau.com/views/TheWideningDivide/01?:language=en&:display_count=y&:origin=viz_share_link
     // modalInner.innerHTML = `
     // <div class="embed-responsive embed-responsive-16by9">
     //   <iframe class="embed-responsive-item"
@@ -99,3 +106,4 @@ function displayRecipes(workbooks) {
 form.addEventListener('submit', handleSubmit);
 // on page load run it with pizza
 fetchAndDisplay('will7508');
+npm 
