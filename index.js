@@ -79,14 +79,6 @@ function displayRecipes(workbooks) {
         src="${url}"
         allowfullscreen></iframe>
     </div>`;
-    // https://public.tableau.com/views/TheWideningDivide/01?:language=en&:display_count=y&:origin=viz_share_link
-    // modalInner.innerHTML = `
-    // <div class="embed-responsive embed-responsive-16by9">
-    //   <iframe class="embed-responsive-item"
-    //     src="${url}"
-    //     allowfullscreen></iframe>
-    // </div>
-    // `;
     // Show the modal
     modalOuter.classList.add('open');
     
@@ -98,10 +90,8 @@ function displayRecipes(workbooks) {
     })
   }
 
-
   cardButton.forEach(button => button.addEventListener('click', handleCardButtonClick));
 }
-
 
 form.addEventListener('submit', handleSubmit);
 // on page load run it with pizza
